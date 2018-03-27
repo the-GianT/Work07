@@ -66,8 +66,9 @@ be sure to conver those degrees to radians (M_PI is the constant
 for PI)
 ====================*/
 void parse_file ( char * filename, 
-                  struct matrix * transform, 
+                  struct matrix * transform,
                   struct matrix * edges,
+		  struct matrix * polygons,
                   screen s) {
 
   FILE *f;
@@ -100,7 +101,7 @@ void parse_file ( char * filename,
 	return;
       }
       
-      add_sphere(edges, *args, args[1], args[2], args[3], 100);
+      add_sphere(polygons, *args, args[1], args[2], args[3], 100);
 
     } else if (strncmp(line, "torus", strlen(line)) == 0) {
       double args[5];
@@ -116,7 +117,7 @@ void parse_file ( char * filename,
 	return;
       }
       
-      add_torus(edges, *args, args[1], args[2], args[3], args[4], 100);
+      add_torus(polygons, *args, args[1], args[2], args[3], args[4], 100);
 
     } else if (strncmp(line, "box", strlen(line)) == 0) {
       double args[6];
@@ -132,7 +133,7 @@ void parse_file ( char * filename,
 	return;
       }
       
-      add_box(edges, *args, args[1], args[2], args[3], args[4], args[5]);
+      add_box(polygons, *args, args[1], args[2], args[3], args[4], args[5]);
 
     } else if (strncmp(line, "clear", strlen(line)) == 0) {
       edges->lastcol = 0;
