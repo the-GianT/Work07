@@ -137,6 +137,7 @@ void parse_file ( char * filename,
 
     } else if (strncmp(line, "clear", strlen(line)) == 0) {
       edges->lastcol = 0;
+      polygons->lastcol = 0;
       
     } else if (strncmp(line, "circle", strlen(line)) == 0) {
       int args[4];
