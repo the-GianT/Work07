@@ -73,7 +73,12 @@ void parse_file ( char * filename,
 
   FILE *f;
   char line[256];
+  color c;
+
   clear_screen(s);
+  c.red = 0;
+  c.green = 0;
+  c.blue = 0;
 
   if ( strcmp(filename, "stdin") == 0 ) 
     f = stdin;
@@ -277,26 +282,20 @@ void parse_file ( char * filename,
       
     } else if (strncmp(line, "apply", strlen(line)) == 0) {
       matrix_mult(transform, edges);
+      matrix_mult(transform, polygons);
       
     } else if (strncmp(line, "display", strlen(line)) == 0) {
-      color c;
 
-      c.red = MAX_COLOR;
-      c.green = MAX_COLOR;
-      c.blue = MAX_COLOR;
-      
-      draw_lines(edges, s, c);
-      display(s);
       clear_screen(s);
+      draw_lines(edges, s, c);
+      draw_lines(polygons, s, c);
+      display(s);
       
     } else if (strncmp(line, "save", strlen(line)) == 0) {
-      color c;
 
-      c.red = MAX_COLOR;
-      c.green = MAX_COLOR;
-      c.blue = MAX_COLOR;
-      
+      clear_screen(s);
       draw_lines(edges, s, c);
+      draw_lines(polygons, s, c);
 
       /* Read file name argument for save: */
       fgets(line, 255, f);
@@ -304,7 +303,6 @@ void parse_file ( char * filename,
       printf(":%s:\n", line);
       
       save_extension(s, line);
-      clear_screen(s);
       
     } else if (strncmp(line, "quit", strlen(line)) == 0) {
       return;
