@@ -18,7 +18,7 @@
   double x2
   double y2
   double z2  
-  Returns: 
+n  Returns: 
   Adds the vertices (x0, y0, z0), (x1, y1, z1)
   and (x2, y2, z2) to the polygon matrix. They
   define a single triangle surface.
@@ -27,6 +27,9 @@ void add_polygon( struct matrix *polygons,
                   double x0, double y0, double z0, 
                   double x1, double y1, double z1, 
                   double x2, double y2, double z2 ) {
+  add_point(polygons, x0, y0, z0);
+  add_point(polygons, x1, y1, z1);
+  add_point(polygons, x2, y2, z2);
 }
 
 /*======== void draw_polygons() ==========
@@ -39,6 +42,25 @@ void add_polygon( struct matrix *polygons,
   triangles
   ====================*/
 void draw_polygons( struct matrix *polygons, screen s, color c ) {
+  int point;
+  
+  if (polygons->lastcol < 3) {
+    printf("Need at least 3 points to draw a polygon!\n");
+    return;
+  }
+
+  for (point = 0; point < polygons->lastcol - 2; point += 3) {
+    draw_line(polygons->m[0][point],
+	      polygons->m[1][point],
+	      polygons->m[0][point+1],
+	      polygons->m[1][point+1],
+	      s, c);
+    draw_line(polygons->m[0][point+1],
+	      polygons->m[1][point+1],
+	      polygons->m[0][point+2],
+	      polygons->m[1][point+2],
+	      s, c);
+  }
 }
 
 
@@ -406,7 +428,7 @@ void draw_lines( struct matrix * points, screen s, color c) {
                points->m[1][point],
                points->m[0][point+1],
                points->m[1][point+1],
-               s, c);	       
+               s, c);
 }// end draw_lines
 
 
