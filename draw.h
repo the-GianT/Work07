@@ -13,7 +13,7 @@ void add_polygons( struct matrix * points,
 void draw_polygons( struct matrix * points, screen s, color c);
 
 //3d shapes
-void add_box( struct matrix * edges,
+void add_box( struct matrix * polygons,
               double x, double y, double z,
               double width, double height, double depth );
 void add_sphere( struct matrix * edges, 

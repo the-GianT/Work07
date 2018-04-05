@@ -60,6 +60,11 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
 	      polygons->m[0][point+2],
 	      polygons->m[1][point+2],
 	      s, c);
+    draw_line(polygons->m[0][point+2],
+	      polygons->m[1][point+2],
+	      polygons->m[0][point],
+	      polygons->m[1][point],
+	      s, c);
   }
 }
 
@@ -78,7 +83,7 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
   upper-left corner is (x, y, z) with width, 
   height and depth dimensions.
   ====================*/
-void add_box( struct matrix * edges,
+void add_box( struct matrix * polygons,
               double x, double y, double z,
               double width, double height, double depth ) {
 
@@ -90,7 +95,31 @@ void add_box( struct matrix * edges,
   z0 = z;
   z1 = z-depth;
 
-  
+  // front
+  add_polygon(polygons, x0, y0, z0, x1, y0, z0, x0, y1, z0);
+  add_polygon(polygons, x1, y1, z0, x0, y1, z0, x1, y0, z0);
+
+  // back
+  add_polygon(polygons, x1, y0, z1, x0, y0, z1, x1, y1, z1);
+  add_polygon(polygons, x0, y1, z1, x1, y1, z1, x0, y0, z1);
+
+  // top
+  add_polygon(polygons, x0, y0, z1, x1, y0, z1, x0, y0, z0);
+  add_polygon(polygons, x1, y0, z0, x0, y0, z0, x1, y0, z1);
+
+  // bottom
+  add_polygon(polygons, x0, y1, z0, x1, y1, z0, x0, y1, z1);
+  add_polygon(polygons, x1, y1, z1, x0, y1, z1, x1, y1, z0);
+
+  // left side (when viewing box from the front)
+  add_polygon(polygons, x0, y0, z1, x0, y0, z0, x0, y1, z1);
+  add_polygon(polygons, x0, y1, z0, x0, y1, z1, x0, y0, z0);
+
+  // right side (when viewing box from the front)
+  add_polygon(polygons, x1, y0, z0, x1, y0, z1, x1, y1, z0);
+  add_polygon(polygons, x1, y1, z1, x1, y1, z0, x1, y0, z1);
+
+  /*  
   //front
   add_edge(edges, x0, y0, z0, x1, y0, z0);
   add_edge(edges, x1, y0, z0, x1, y1, z0);
@@ -108,6 +137,7 @@ void add_box( struct matrix * edges,
   add_edge(edges, x1, y0, z0, x1, y0, z1);
   add_edge(edges, x1, y1, z0, x1, y1, z1);
   add_edge(edges, x0, y1, z0, x0, y1, z1);
+  */
 }
 
 

@@ -287,15 +287,20 @@ void parse_file ( char * filename,
     } else if (strncmp(line, "display", strlen(line)) == 0) {
 
       clear_screen(s);
-      draw_lines(edges, s, c);
-      draw_lines(polygons, s, c);
+      if (edges->lastcol)
+	draw_lines(edges, s, c);
+      if (polygons->lastcol)
+	draw_polygons(polygons, s, c);
+      
       display(s);
       
     } else if (strncmp(line, "save", strlen(line)) == 0) {
 
       clear_screen(s);
-      draw_lines(edges, s, c);
-      draw_lines(polygons, s, c);
+      if (edges->lastcol)
+	draw_lines(edges, s, c);
+      if (edges->lastcol)
+	draw_polygons(polygons, s, c);
 
       /* Read file name argument for save: */
       fgets(line, 255, f);
