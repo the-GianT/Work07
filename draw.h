@@ -16,7 +16,7 @@ void draw_polygons( struct matrix * points, screen s, color c);
 void add_box( struct matrix * polygons,
               double x, double y, double z,
               double width, double height, double depth );
-void add_sphere( struct matrix * edges, 
+void add_sphere( struct matrix * polygons, 
                  double cx, double cy, double cz,
                  double r, int step );
 struct matrix * generate_sphere(double cx, double cy, double cz,

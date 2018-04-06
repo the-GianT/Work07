@@ -106,7 +106,7 @@ void parse_file ( char * filename,
 	return;
       }
       
-      add_sphere(polygons, *args, args[1], args[2], args[3], 100);
+      add_sphere(polygons, *args, args[1], args[2], args[3], 12);
 
     } else if (strncmp(line, "torus", strlen(line)) == 0) {
       double args[5];
