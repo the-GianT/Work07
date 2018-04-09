@@ -21,7 +21,7 @@ void add_sphere( struct matrix * polygons,
                  double r, int step );
 struct matrix * generate_sphere(double cx, double cy, double cz,
                                 double r, int step );
-void add_torus( struct matrix * edges, 
+void add_torus( struct matrix * polygons,
                 double cx, double cy, double cz,
                 double r1, double r2, int step );
 struct matrix * generate_torus( double cx, double cy, double cz,

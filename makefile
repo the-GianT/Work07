@@ -1,5 +1,5 @@
 OBJECTS= main.o draw.o display.o matrix.o parser.o
-CFLAGS= -Wall
+CFLAGS= -Wall -g
 LDFLAGS= -lm
 CC= gcc
 
@@ -7,10 +7,10 @@ run: main
 	./main script
 
 main: $(OBJECTS)
-	$(CC) -o main $(OBJECTS) $(LDFLAGS)
+	$(CC) -g -o main $(OBJECTS) $(LDFLAGS)
 
 main.o: main.c display.h draw.h ml6.h matrix.h parser.h
-	$(CC) -c main.c
+	$(CC) -g -c main.c
 
 draw.o: draw.c draw.h display.h ml6.h matrix.h
 	$(CC) $(CFLAGS) -c draw.c

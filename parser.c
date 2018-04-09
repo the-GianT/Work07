@@ -122,7 +122,7 @@ void parse_file ( char * filename,
 	return;
       }
       
-      add_torus(polygons, *args, args[1], args[2], args[3], args[4], 100);
+      add_torus(polygons, *args, args[1], args[2], args[3], args[4], 12);
 
     } else if (strncmp(line, "box", strlen(line)) == 0) {
       double args[6];

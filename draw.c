@@ -281,12 +281,23 @@ struct matrix * generate_sphere(double cx, double cy, double cz,
   should call generate_torus to create the
   necessary points
   ====================*/
-void add_torus( struct matrix * edges, 
+void add_torus( struct matrix * polygons, 
                 double cx, double cy, double cz,
                 double r1, double r2, int step ) {
 
   struct matrix *points = generate_torus(cx, cy, cz, r1, r2, step);
-  int index, lat, longt;
+
+  int index0;
+  int index1; // will be equivalent to index0 + 1
+  
+  /*
+    index of the point adjacent to the one pointed to by the "index" variable
+    (on the same latitude line but different longitude line)
+  */
+  int adjindex0;
+  int adjindex1; // will be equivalent to adjindex0 + 1
+  
+  int lat, longt;
   int latStop, longStop, latStart, longStart;
   latStart = 0;
   latStop = step;
@@ -296,13 +307,36 @@ void add_torus( struct matrix * edges,
   for ( lat = latStart; lat < latStop; lat++ ) {
     for ( longt = longStart; longt < longStop; longt++ ) {
 
-      index = lat * step + longt;
+      index0 = lat * step + longt;
+      index1 = index0 + 1;
+      adjindex0 = (lat + 1) % latStop * step + longt;
+      adjindex1 = adjindex0 + 1;
+      add_polygon( polygons, points->m[0][index0],
+		   points->m[1][index0],
+		   points->m[2][index0],
+		   points->m[0][adjindex0],
+		   points->m[1][adjindex0],
+		   points->m[2][adjindex0],
+		   points->m[0][index1],
+		   points->m[1][index1],
+		   points->m[2][index1]);
+      add_polygon( polygons, points->m[0][adjindex1],
+		   points->m[1][adjindex1],
+		   points->m[2][adjindex1],
+		   points->m[0][index1],
+		   points->m[1][index1],
+		   points->m[2][index1],
+		   points->m[0][adjindex0],
+		   points->m[1][adjindex0],
+		   points->m[2][adjindex0]);
+      /*
       add_edge( edges, points->m[0][index],
                 points->m[1][index],
                 points->m[2][index],
                 points->m[0][index] + 1,
                 points->m[1][index] + 1,
                 points->m[2][index] + 1);
+      */
     }
   }
   free_matrix(points);
