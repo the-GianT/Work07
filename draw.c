@@ -195,7 +195,10 @@ void add_sphere( struct matrix * polygons,
       // index1 = (index0 + 1) % (sizeof(points->m) / sizeof(int));
       // index1 = lat * step + longt % longStop;
       index1 = index0 + 1;
+
+      // Go back to beginning when you get to the last longitude line
       adjindex0 = (lat + 1) % latStop * step + longt;
+      
       adjindex1 = adjindex0 + 1;
       add_polygon( polygons, points->m[0][index0],
 		   points->m[1][index0],
@@ -308,9 +311,14 @@ void add_torus( struct matrix * polygons,
     for ( longt = longStart; longt < longStop; longt++ ) {
 
       index0 = lat * step + longt;
-      index1 = index0 + 1;
+
+      /* Go back to beginning when you reach the end of the circle or longitude
+	 line.
+      */
+      index1 = (index0 + 1) % points->lastcol;
       adjindex0 = (lat + 1) % latStop * step + longt;
-      adjindex1 = adjindex0 + 1;
+      adjindex1 = (adjindex0 + 1) % points->lastcol;
+      
       add_polygon( polygons, points->m[0][index0],
 		   points->m[1][index0],
 		   points->m[2][index0],
