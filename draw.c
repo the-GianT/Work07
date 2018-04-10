@@ -43,6 +43,8 @@ void add_polygon( struct matrix *polygons,
   ====================*/
 void draw_polygons( struct matrix *polygons, screen s, color c ) {
   int point;
+  int x0, y0, z0;
+  int x1, y1, z1;
   
   if (polygons->lastcol < 3) {
     printf("Need at least 3 points to draw a polygon!\n");
@@ -50,6 +52,13 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
   }
 
   for (point = 0; point < polygons->lastcol - 2; point += 3) {
+    x0 = polygons->m[0][point];
+    y0 = polygons->m[1][point];
+    z0 = polygons->m[2][point];
+
+    x1 = polygons->m[0][point + 1];
+    y1 = polygons->m
+    
     draw_line(polygons->m[0][point],
 	      polygons->m[1][point],
 	      polygons->m[0][point+1],
@@ -162,7 +171,8 @@ void add_box( struct matrix * polygons,
   add_edge(edges, x1, y1, z0, x1, y1, z1);
   add_edge(edges, x0, y1, z0, x0, y1, z1);
   */
-}
+  
+} // end add_box definition
 
 
 /*======== void add_sphere() ==========
@@ -227,25 +237,25 @@ void add_sphere( struct matrix * polygons,
       add_polygon( polygons, points->m[0][index0],
 		   points->m[1][index0],
 		   points->m[2][index0],
-		   points->m[0][adjindex0],
-		   points->m[1][adjindex0],
-		   points->m[2][adjindex0],
-		   points->m[0][index1],
-		   points->m[1][index1],
-		   points->m[2][index1]);
-      add_polygon( polygons, points->m[0][adjindex1],
-		   points->m[1][adjindex1],
-		   points->m[2][adjindex1],
 		   points->m[0][index1],
 		   points->m[1][index1],
 		   points->m[2][index1],
 		   points->m[0][adjindex0],
 		   points->m[1][adjindex0],
 		   points->m[2][adjindex0]);
-    }
-  }
+      add_polygon( polygons, points->m[0][adjindex1],
+		   points->m[1][adjindex1],
+		   points->m[2][adjindex1],
+		   points->m[0][adjindex0],
+		   points->m[1][adjindex0],
+		   points->m[2][adjindex0],
+		   points->m[0][index1],
+		   points->m[1][index1],
+		   points->m[2][index1]);
+    } // end inner for loop
+  } // end outer for loop
   free_matrix(points);
-}
+} // end add_sphere definition
 
 /*======== void generate_sphere() ==========
   Inputs:   double cx
@@ -346,21 +356,21 @@ void add_torus( struct matrix * polygons,
       add_polygon( polygons, points->m[0][index0],
 		   points->m[1][index0],
 		   points->m[2][index0],
-		   points->m[0][adjindex0],
-		   points->m[1][adjindex0],
-		   points->m[2][adjindex0],
-		   points->m[0][index1],
-		   points->m[1][index1],
-		   points->m[2][index1]);
-      add_polygon( polygons, points->m[0][adjindex1],
-		   points->m[1][adjindex1],
-		   points->m[2][adjindex1],
 		   points->m[0][index1],
 		   points->m[1][index1],
 		   points->m[2][index1],
 		   points->m[0][adjindex0],
 		   points->m[1][adjindex0],
 		   points->m[2][adjindex0]);
+      add_polygon( polygons, points->m[0][adjindex1],
+		   points->m[1][adjindex1],
+		   points->m[2][adjindex1],
+		   points->m[0][adjindex0],
+		   points->m[1][adjindex0],
+		   points->m[2][adjindex0],
+		   points->m[0][index1],
+		   points->m[1][index1],
+		   points->m[2][index1]);
       /*
       add_edge( edges, points->m[0][index],
                 points->m[1][index],
@@ -369,10 +379,10 @@ void add_torus( struct matrix * polygons,
                 points->m[1][index] + 1,
                 points->m[2][index] + 1);
       */
-    }
-  }
+    } // end inner for loop
+  } // end outer for loop
   free_matrix(points);
-}
+} // end add_torus definition
 
 
 /*======== void generate_torus() ==========
