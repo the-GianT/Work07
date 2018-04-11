@@ -299,7 +299,7 @@ void parse_file ( char * filename,
       clear_screen(s);
       if (edges->lastcol)
 	draw_lines(edges, s, c);
-      if (edges->lastcol)
+      if (polygons->lastcol)
 	draw_polygons(polygons, s, c);
 
       /* Read file name argument for save: */
