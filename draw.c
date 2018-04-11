@@ -43,8 +43,8 @@ void add_polygon( struct matrix *polygons,
   ====================*/
 void draw_polygons( struct matrix *polygons, screen s, color c ) {
   int point;
-  int x0, y0, z0;
-  int x1, y1, z1;
+  int ax, ay; // coordinates of vector from P0 to P1
+  int bx, by; // coordinates of vector from P0 to P2
   
   if (polygons->lastcol < 3) {
     printf("Need at least 3 points to draw a polygon!\n");
@@ -52,30 +52,42 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
   }
 
   for (point = 0; point < polygons->lastcol - 2; point += 3) {
-    x0 = polygons->m[0][point];
-    y0 = polygons->m[1][point];
-    z0 = polygons->m[2][point];
 
-    x1 = polygons->m[0][point + 1];
-    y1 = polygons->m
-    
-    draw_line(polygons->m[0][point],
-	      polygons->m[1][point],
-	      polygons->m[0][point+1],
-	      polygons->m[1][point+1],
-	      s, c);
-    draw_line(polygons->m[0][point+1],
-	      polygons->m[1][point+1],
-	      polygons->m[0][point+2],
-	      polygons->m[1][point+2],
-	      s, c);
-    draw_line(polygons->m[0][point+2],
-	      polygons->m[1][point+2],
-	      polygons->m[0][point],
-	      polygons->m[1][point],
-	      s, c);
-  }
-}
+    /*
+      take cross product of the two vectors (the vector from P0 to p1 and the
+      vector from P2 to P0) and compare it to 0)
+    */
+
+    ax = polygons->m[0][point + 1] - polygons->m[0][point];
+    ay = polygons->m[1][point + 1] - polygons->m[1][point];
+
+    bx = polygons->m[0][point + 2] - polygons->m[0][point];
+    by = polygons->m[1][point + 2] - polygons->m[1][point];
+
+    /*
+      For now, we are using <0, 0, z> as the view vector, so if the z
+      coordinate of the normal vector is positive, the polygon is frontfacing
+      and we draw it.
+    */
+    if (ax * by - ay * bx > 0) {
+      draw_line(polygons->m[0][point],
+		polygons->m[1][point],
+		polygons->m[0][point+1],
+		polygons->m[1][point+1],
+		s, c);
+      draw_line(polygons->m[0][point+1],
+		polygons->m[1][point+1],
+		polygons->m[0][point+2],
+		polygons->m[1][point+2],
+		s, c);
+      draw_line(polygons->m[0][point+2],
+		polygons->m[1][point+2],
+		polygons->m[0][point],
+		polygons->m[1][point],
+		s, c);
+    } // end if statement
+  } // end for loop
+} // end draw_polygons function definition
 
 
 /*======== void add_box() ==========
@@ -105,50 +117,26 @@ void add_box( struct matrix * polygons,
   z1 = z-depth;
 
   // front
-  /*
-  add_polygon(polygons, x0, y0, z0, x1, y0, z0, x0, y1, z0);
-  add_polygon(polygons, x1, y1, z0, x0, y1, z0, x1, y0, z0);
-  */
   add_polygon(polygons, x0, y0, z0, x0, y1, z0, x1, y0, z0);
   add_polygon(polygons, x1, y1, z0, x1, y0, z0, x0, y1, z0);
 
   // back
-  /*
-  add_polygon(polygons, x1, y0, z1, x0, y0, z1, x1, y1, z1);
-  add_polygon(polygons, x0, y1, z1, x1, y1, z1, x0, y0, z1);
-  */
   add_polygon(polygons, x1, y0, z1, x1, y1, z1, x0, y0, z1);
   add_polygon(polygons, x0, y1, z1, x0, y0, z1, x1, y1, z1);
 
   // top
-  /*
-  add_polygon(polygons, x0, y0, z1, x1, y0, z1, x0, y0, z0);
-  add_polygon(polygons, x1, y0, z0, x0, y0, z0, x1, y0, z1);
-  */
   add_polygon(polygons, x0, y0, z1, x0, y0, z0, x1, y0, z1);
   add_polygon(polygons, x1, y0, z0, x1, y0, z1, x0, y0, z0);
 
   // bottom
-  /*
-  add_polygon(polygons, x0, y1, z0, x1, y1, z0, x0, y1, z1);
-  add_polygon(polygons, x1, y1, z1, x0, y1, z1, x1, y1, z0);
-  */
   add_polygon(polygons, x0, y1, z0, x0, y1, z1, x1, y1, z0);
   add_polygon(polygons, x1, y1, z1, x1, y1, z0, x0, y1, z1);
 
   // left side (when viewing box from the front)
-  /*
-  add_polygon(polygons, x0, y0, z1, x0, y0, z0, x0, y1, z1);
-  add_polygon(polygons, x0, y1, z0, x0, y1, z1, x0, y0, z0);
-  */
   add_polygon(polygons, x0, y0, z1, x0, y1, z1, x0, y0, z0);
   add_polygon(polygons, x0, y1, z0, x0, y0, z0, x0, y1, z1);
 
   // right side (when viewing box from the front)
-  /*
-  add_polygon(polygons, x1, y0, z0, x1, y0, z1, x1, y1, z0);
-  add_polygon(polygons, x1, y1, z1, x1, y1, z0, x1, y0, z1);
-  */
   add_polygon(polygons, x1, y0, z0, x1, y1, z0, x1, y0, z1);
   add_polygon(polygons, x1, y1, z1, x1, y0, z1, x1, y1, z0);
 
